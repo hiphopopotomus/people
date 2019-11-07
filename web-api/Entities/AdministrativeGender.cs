@@ -48,6 +48,29 @@ namespace web_api.Entities
         }
     }
 
+    // See https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/enumeration-classes-over-enum-types
+    public abstract class Enumeration : IComparable
+    {
+        public int Id { get; private set; }
+        public string Name { get; private set; }
+
+        protected Enumeration(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public override string ToString() => Id.ToString();
+
+        public static IEnumerable<T> GetAll<T>() where T : Enumeration
+        {
+            var fields = typeof(T).GetFields(BindingFlags.Public |
+                                            BindingFlags.Static |
+                                            BindingFlags.DeclaredOnly);
+            return fields.Select(f => f.GetValue(null)).Cast<T>();
+        }
+    }
+ 
     internal class AdministrativeGenderConverter : JsonConverter<AdministrativeGender>
     {
         public override AdministrativeGender Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
