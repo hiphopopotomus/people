@@ -1,41 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+using webapi.Data;
 
-namespace web_api.Controllers
+namespace webapi.Controllers
 {
 
     [ApiController]
     [Route("[controller]")]
     public class PersonController : ControllerBase
     {
-        private IConfiguration _configuration;
-        private static HttpClient _httpClient = new HttpClient();
+        private IDataSource _dataSource;
 
-        public PersonController(IConfiguration configuration)
+        public PersonController(IDataSource dataSource)
         {
-            _configuration = configuration;
+            _dataSource = dataSource;
         }
 
         [HttpGet]
-        public async Task<ActionResult<Person>> GetPersonList()
+        public async Task<ActionResult<Person[]>> GetPersonList()
         {
-            var data = await _httpClient.GetStringAsync(_configuration["repository-uri"] + "people/04013a4fe3d826de43d931c45300013b");
-            return JsonConvert.DeserializeObject<Person>(data);
+            return await _dataSource.FindPersons().ConfigureAwait(true);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(long id)
+        public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            var data = await _httpClient.GetStringAsync(_configuration["repository-uri"] + "people/" + id);
-            return JsonConvert.DeserializeObject<Person>(data);
+            return await _dataSource.GetPerson(id).ConfigureAwait(true);
         }
     }
 }

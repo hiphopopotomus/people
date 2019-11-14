@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using web_api.Entities;
+using webapi.Entities;
 
-namespace web_api
+namespace webapi
 {
-    public class Person
+    public class Person : Document
     {
+        public bool active { get; set; }
         public AdministrativeGender gender { get; set; }
         public DateTime birthDate { get; set; }
-
+        public List<HumanName> name { get; set; }
     }
 }
