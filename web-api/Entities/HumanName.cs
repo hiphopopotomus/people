@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace webapi.Entities
 {
     public class HumanName
     {
+        public NameUse use { get; set; }
         public string text { get; set; }
         public string family { get; set; }
         public List<string> given { get; set; }
