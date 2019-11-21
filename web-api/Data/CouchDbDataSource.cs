@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -26,14 +25,15 @@ namespace webapi.Data
             _httpClient.Dispose();
         }
 
-        public async Task<ActionResult<Person>> GetPerson(Guid id)
+        public async Task<Person> GetPerson(Guid id)
         {
             var location = GetUriBuilder(id.ToString("N", CultureInfo.InvariantCulture));
             var result = await _httpClient.GetStringAsync(location.Uri).ConfigureAwait(false);
+
             return JsonSerializer.Deserialize<Person>(result);
         }
 
-        public async Task<ActionResult<Person[]>> FindPersons()
+        public async Task<Person[]> FindPersons()
         {
             var content = await PostRequest("_find", "{\"selector\": {\"type\":\"Person\"}}").ConfigureAwait(false);
             var searchResult = JsonSerializer.Deserialize<CouchDbSearchResponse>(content);

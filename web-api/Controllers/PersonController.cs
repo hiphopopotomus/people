@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Data;
+using webapi.Entities;
 
 namespace webapi.Controllers
 {
@@ -18,16 +20,16 @@ namespace webapi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Person[]>> GetPersonList()
+        public async Task<ActionResult<FhirPerson[]>> GetPersonList()
         {
-            return await _dataSource.FindPersons().ConfigureAwait(true);
+            return (await _dataSource.FindPersons().ConfigureAwait(false)).Select(p => (FhirPerson)p).ToArray();
         }
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            return await _dataSource.GetPerson(id).ConfigureAwait(true);
+            return await _dataSource.GetPerson(id).ConfigureAwait(false);
         }
     }
 }

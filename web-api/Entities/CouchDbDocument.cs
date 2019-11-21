@@ -4,7 +4,7 @@ using webapi.Json;
 
 namespace webapi.Entities
 {
-    public class Document
+    public class CouchDbDocument
     {
         [JsonPropertyName("_id")]
         [JsonConverter(typeof(GuidConverter))]
